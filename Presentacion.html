@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Presentación de Plataforma</title>
+  <link rel="icon" href="Fotos/logo.ico">
+  <link rel="stylesheet" href="Presentacion.CSS">
+  <style>
+    :root {
+      --dark: #001830;
+      --nav-bg: #002a4e;
+      --accent: #00b2ff;
+      --emailColor: #004080;
+      --telegramColor: #0088cc;
+      --whatsappColor: #35D952;
+      --font: 'Segoe UI', Tahoma, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--dark);
+      color: #eee;
+      font-family: var(--font);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      min-height: 100vh;
+    }
+    header.navbar {
+      width: 100%;
+      background: var(--nav-bg);
+      padding: 1rem;
+      position: fixed;
+      top: 0;
+      display: flex;
+      justify-content: center;
+      z-index: 1000;
+      animation: fadeInDown 0.8s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+    header.navbar a {
+      color: #eee;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      position: relative;
+      transition: color .3s;
+    }
+    header.navbar a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      transform: translateX(-50%) scaleX(0);
+      transform-origin: right;
+      width: 60%;
+      height: 2px;
+      background: var(--accent);
+      transition: transform .3s;
+    }
+    header.navbar a:hover {
+      color: var(--accent);
+      text-shadow: 0 0 8px var(--accent);
+    }
+    header.navbar a:hover::after {
+      transform: translateX(-50%) scaleX(1);
+      transform-origin: left;
+    }
+    main {
+      margin-top: 100px;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      width: 100%;
+    }
+    .card {
+      background: var(--nav-bg);
+      border: 0 solid var(--accent);
+      border-radius: 1rem;
+      max-width: 600px;
+      width: 100%;
+      padding: 2rem;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+      animation: fadeInUp 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+      transition: transform .3s, box-shadow .3s;
+      cursor: pointer;
+      --hover-color: var(--accent);
+    }
+    .card:hover {
+      transform: translateY(-5px) scale(1.02);
+      border: 2px solid var(--hover-color);
+      box-shadow:
+        0 0 10px var(--hover-color),
+        0 0 20px var(--hover-color),
+        0 0 30px var(--hover-color);
+    }
+    .card img {
+      max-width: 100%;
+      max-height: 300px;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      border-radius: .75rem;
+      margin-bottom: 1.5rem;
+    }
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      animation: fadeIn 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+    .modal {
+      background: var(--nav-bg);
+      padding: 2rem;
+      border-radius: 1rem;
+      display: flex;
+      gap: 2rem;
+      width: 80%;
+      max-width: 600px;
+      justify-content: space-around;
+      align-items: center;
+      animation: fadeInUp 0.7s cubic-bezier(0.25, 0.1, 0.25, 1);
+    }
+    @keyframes iconEntry {
+      0%   { opacity: 0; transform: scale(0.3); }
+      60%  { opacity: 1; transform: scale(1.1); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .icon-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      opacity: 0;
+      transform: scale(0.3);
+      animation: iconEntry 0.8s cubic-bezier(0.43, 0.13, 0.23, 0.96) forwards;
+    }
+    .icon-wrapper:nth-child(1) { animation-delay: 0.15s; }
+    .icon-wrapper:nth-child(2) { animation-delay: 0.3s; }
+    .icon-wrapper:nth-child(3) { animation-delay: 0.45s; }
+    .icon-wrapper a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      overflow: hidden;
+      transition: transform 0.3s, box-shadow 0.3s;
+      color: inherit;
+      text-decoration: none;
+    }
+    .icon-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .icon-wrapper p {
+      margin: 0;
+      font-size: 0.9rem;
+      color: #bbb;
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+    #detail-price {
+      font-family: 'Segoe UI', Tahoma, sans-serif;
+      font-size: 1.5rem;
+      color: #fff;
+      font-weight: bold
+    }
+    .icon-wrapper.whatsapp:hover a { transform: scale(1.1); box-shadow: 0 0 15px var(--whatsappColor), 0 0 25px var(--whatsappColor); }
+    .icon-wrapper.whatsapp:hover p { color: var(--whatsappColor); text-shadow: 0 0 8px var(--whatsappColor), 0 0 16px var(--whatsappColor); }
+    .icon-wrapper.email:hover a { transform: scale(1.1); box-shadow: 0 0 15px var(--accent), 0 0 25px var(--accent); }
+    .icon-wrapper.email:hover p { color: var(--accent); text-shadow: 0 0 8px var(--accent), 0 0 16px var(--accent); }
+    .icon-wrapper.telegram:hover a { transform: scale(1.1); box-shadow: 0 0 15px var(--telegramColor), 0 0 25px var(--telegramColor); }
+    .icon-wrapper.telegram:hover p { color: var(--telegramColor); text-shadow: 0 0 8px var(--telegramColor), 0 0 16px var(--telegramColor); }
+    @media (max-width: 600px) {
+      .modal { flex-direction: column; gap: 1rem; width: 90%; padding: 1rem; }
+      .icon-wrapper a { width: 80px; height: 80px; }
+      .icon-wrapper p { font-size: 0.8rem; }
+    }
+    @media (min-width: 1024px) {
+      .modal { width: 60%; max-width: 800px; }
+      .icon-wrapper a { width: 120px; height: 120px; }
+      .icon-wrapper p { font-size: 1rem; }
+    }
+    footer { background: var(--nav-bg); width: 100%; padding: 3rem 0; text-align: center; color: #bbb; margin-top: auto; }
+    @keyframes fadeInDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fadeInUp   { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <a href="javascript:history.back()">&larr; Volver</a>
+  </header>
+  <main>
+    <div class="card" id="detail-card">
+      <img id="detail-img" src="" alt="Imagen de la plataforma" />
+      <h1 id="detail-title"></h1>
+      <p id="detail-desc"></p>
+      <p id="detail-price"><b></b></p>
+    </div>
+    <div class="modal-overlay" id="contact-modal">
+      <div class="modal">
+        <div class="icon-wrapper whatsapp">
+          <a href="https://wa.me/50672313387" target="_blank"><img src="Fotos/WhatsApp.jpeg" alt="WhatsApp" /></a>
+          <p>WhatsApp</p>
+        </div>
+        <div class="icon-wrapper email">
+          <a href="mailto:novastreamcr@gmail.com"><img src="Fotos/Email.jpeg" alt="Correo" /></a>
+          <p>Email</p>
+        </div>
+        <div class="icon-wrapper telegram">
+          <a href="https://instagram.com/novastream" target="_blank"><img src="Fotos/Telegram.jfif" alt="Telegram" /></a>
+          <p>Telegram</p>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <p>© 2025 NovaStream - Tu mundo premium a un solo clic.</p>
+  </footer>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    
+    const defaultAccent = getComputedStyle(document.documentElement).getPropertyValue('--accent').trim();
+    const color  = params.get('color') || defaultAccent;
+    const title  = params.get('title') || 'Plataforma';
+    const desc   = params.get('desc')  || '';
+    const price = params.get('price') || '';
+    const imgSrc = params.get('img')   || 'Fotos/platform-image.jpeg';
+    document.getElementById('detail-title').textContent = title;
+    document.getElementById('detail-desc').textContent  = desc;
+    document.getElementById('detail-price').textContent = price;
+    const imgEl = document.getElementById('detail-img'); imgEl.src = imgSrc; imgEl.alt = title;
+    // Apply dynamic color to title, border, and hover effect
+    const card = document.getElementById('detail-card');
+    document.getElementById('detail-title').style.color = color;
+    document.getElementById('detail-price').style.color = color;
+    card.style.borderColor = color;
+    card.style.setProperty('--hover-color', color);
+    const modal = document.getElementById('contact-modal');
+    card.addEventListener('click', () => modal.style.display = 'flex');
+    modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
+    
+    
+  </script>
+</body>
+</html>

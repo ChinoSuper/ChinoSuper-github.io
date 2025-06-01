@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NovaStream</title>
+  <link rel="stylesheet" href="Principal.CSS">
+  <link rel="icon" href="Fotos/logo.ico">
+  <style>
+    :root {
+      --color-dark: #001830;
+      --color-medium-dark: #002a4e;
+      --color-medium-light: #004080;
+      --color-light: #0066b2;
+      --accent: #00b2ff;
+      --font-base: 'Segoe UI', Tahoma, sans-serif;
+      --spotify: #1DB954;
+      --disney: #0063F0;
+      --prime: #146EB4;
+      --paramount: #00579D;
+      --crunchyroll: #F26623;
+      --youtube: #FF0000;
+    }
+    *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: var(--font-base);
+      background: var(--color-dark);
+      color: #eee;
+      text-align: center;
+      padding-top: 120px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+    .container { width: 90%; max-width: 1100px; margin: auto; }
+    @keyframes fadeInDown { 0%{opacity:0;transform:translateY(-20px);}100%{opacity:1;transform:translateY(0);} }
+    @keyframes fadeInUp   { 0%{opacity:0;transform:translateY(20px);}100%{opacity:1;transform:translateY(0);} }
+    @keyframes slideInLeft  { 0%{opacity:0;transform:translateX(-50px);}100%{opacity:1;transform:translateX(0);} }
+    @keyframes slideInRight { 0%{opacity:0;transform:translateX(50px);}100%{opacity:1;transform:translateX(0);} }
+    @keyframes fadeIn       { 0%{opacity:0;}100%{opacity:1;} }
+    header.navbar {
+      position: fixed; top: 0; width: 100%;
+      background: var(--color-medium-dark);
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 2rem; z-index: 1000;
+      animation: fadeInDown 0.8s ease-out;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.7);
+    }
+    .logo { display: flex; align-items: center; animation: slideInLeft 0.8s ease-out; }
+    .logo img { width:40px; height:40px; margin-right:0.5rem; }
+    .logo span {
+      font-size:1.5rem; font-weight:700;
+      color:var(--accent); text-shadow:0 0 8px var(--accent);
+    }
+    nav.main-nav {
+      display:flex; gap:1rem; animation: slideInRight 0.8s ease-out;
+    }
+    nav.main-nav a {
+      color:#eee; text-decoration:none; font-weight:500;
+      position:relative; padding:0.5rem 0;
+      transition: color 0.3s, transform 0.3s;
+    }
+    nav.main-nav a::after {
+      content:''; position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+      width:0; height:2px; background:var(--accent);
+      transition: width 0.3s;
+    }
+    nav.main-nav a:hover {
+      color:var(--accent); transform:translateY(-2px);
+      text-shadow:0 0 8px var(--accent);
+    }
+    nav.main-nav a:hover::after { width:60%; }
+
+    /* Menú móvil */
+    .menu-toggle {
+      display:none; background:none; border:none;
+      font-size:1.8rem; color:#eee; cursor:pointer;
+      animation: fadeIn 1s ease-out;
+    }
+    .nav-overlay {
+      display:none; position:fixed; top:0; left:0;
+      width:100%; height:100%;
+      background:rgba(0,0,0,0.95);
+      flex-direction:column; justify-content:center; align-items:center;
+      gap:2rem; z-index:999; animation:fadeIn 0.5s ease-out;
+    }
+    .nav-overlay a {
+      font-size:2rem; color:#eee; text-decoration:none;
+      transition: color 0.3s, transform 0.3s;
+    }
+    .nav-overlay a:hover {
+      color:var(--accent); transform:scale(1.1);
+    }
+    section {
+      opacity:0; transform:translateY(20px);
+      animation:fadeInUp 0.6s forwards;
+      padding:8rem 0; position:relative; scroll-margin-top:140px;
+    }
+    section:nth-of-type(even) { animation-delay:0.3s; }
+    section:nth-of-type(odd)  { animation-delay:0.5s; }
+    section::before {
+      content:''; position:absolute; top:0; left:50%; transform:translateX(-50%);
+      width:60px; height:4px; background:var(--accent); border-radius:2px;
+    }
+    .btn {
+      background-image: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      color:var(--color-medium-dark);
+      padding:1rem 2.5rem; border:none; border-radius:2rem;
+      font-size:1rem; cursor:pointer;
+      transition:transform 0.3s, box-shadow 0.3s;
+      animation:fadeIn 1s ease-out;
+    }
+    .btn:hover {
+      transform:translateY(-4px) scale(1.02);
+      box-shadow:0 0 12px rgba(231, 2, 174, 0.938),0 10px 30px rgba(231, 2, 52, 0.938);
+    }
+    .grid {
+      display:grid; gap:4rem; padding-top:2rem;
+    }
+    @media(min-width:768px){ .grid{grid-template-columns:repeat(2,1fr);} }
+    @media(min-width:1024px){ .grid{grid-template-columns:repeat(3,1fr);} }
+    .card {
+      background:var(--color-medium-dark);
+      padding:2rem; border-radius:1rem; color:#fff;
+      border:2px solid transparent;
+      transition:transform 0.3s,box-shadow 0.3s,border-color 0.3s;
+      animation:slideInLeft 0.8s ease-out;
+    }
+    .card:nth-child(even){ animation-name:slideInRight; }
+    .card:hover {
+      transform:translateY(-10px) scale(1.02);
+      box-shadow:0 0 16px currentColor; border-color:currentColor;
+    }
+    .catalog {
+      display:flex; flex-wrap:wrap; gap:1rem;
+      justify-content:center; padding-top:2rem;
+    }
+    .kit {
+      width:120px; height:120px; display:flex;
+      align-items:center; justify-content:center;
+      border-radius:0.75rem; text-decoration:none; color:#fff;
+      font-weight:600;
+      transition:transform 0.3s,box-shadow 0.3s;
+      background:var(--color-medium-light);
+      animation:fadeIn 1s ease-out;
+    }
+    .kit:hover {
+      transform:translateY(-8px) scale(1.05);
+      box-shadow:0 0 12px currentColor,0 6px 20px rgba(0,0,0,0.5);
+    }
+    footer {
+      background:var(--color-medium-dark);
+      padding:4rem 0;
+      animation:fadeInUp 1s ease-out;
+    }
+    footer p { font-size:0.9rem; color:#bbb; }
+    @media(max-width:768px) {
+      nav.main-nav { display:none; }
+      .menu-toggle { display:block; }
+    }
+     html {
+      scroll-behavior: smooth;
+    }
+    :root {
+      --color-dark: #001830;
+      --color-medium-dark: #002a4e;
+      --color-medium-light: #004080;
+      --color-light: #0066b2;
+      --accent: #00b2ff;
+      --font-base: 'Segoe UI', Tahoma, sans-serif;
+      --spotify: #1DB954;
+      --disney: #0063F0;
+      --prime: #146EB4;
+      --paramount: #00579D;
+      --crunchyroll: #F26623;
+      --youtube: #FF0000;
+      --hbo: #c300ff;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: var(--font-base);
+      background: var(--color-dark);
+      color: #eee;
+      text-align: center;
+      padding-top: 120px;
+      line-height: 1.6;
+    }
+    .container {
+      width: 90%;
+      max-width: 1100px;
+      margin: auto;
+    }
+    header.navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: var(--color-medium-dark);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      z-index: 1000;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.7);
+    }
+    .logo { display: flex; align-items: center; }
+    .logo img { width: 40px; height: 40px; margin-right: 0.5rem; }
+    .logo span {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-shadow: 0 0 8px var(--accent);
+    }
+    nav a {
+      margin: 0 1.2rem;
+      color: #eee;
+      text-decoration: none;
+      font-weight: 500;
+      position: relative;
+      padding: 0.5rem 0;
+      transition: color 0.3s;
+    }
+    nav a::after {
+      content: '';
+      display: block;
+      height: 2px;
+      width: 0;
+      background: var(--accent);
+      transition: width 0.3s;
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    nav a:hover {
+      color: var(--accent);
+      text-shadow: 0 0 8px var(--accent);
+    }
+    nav a:hover::after { width: 60%; }
+    section {
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.6s forwards;
+      padding: 8rem 0;
+      position: relative;
+      scroll-margin-top: 140px;
+    }
+    section::before {
+      content: '';
+      position:absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+    section:nth-of-type(even) { background: var(--color-medium-dark); }
+    section:nth-of-type(odd) { background: var(--color-dark); }
+    section + section { margin-top: 4rem; }
+    #intro { animation-delay: 0.2s; }
+    #cta { animation-delay: 0.4s; }
+    #services { animation-delay: 0.6s; }
+    #why { animation-delay: 0.8s; }
+    #about { animation-delay: 1s; }
+    #catalog { animation-delay: 1.2s; }
+    #advantages { animation-delay: 1.4s; }
+    #contact { animation-delay: 1.6s; }
+    #payments { animation-delay: 1.8s; }
+    h1, h2, h3 { font-weight: 600; margin-bottom: 1rem; color: #fff; }
+    h1 { font-size: 2.75rem; }
+    h2 { font-size: 2.25rem; }
+    h3 { font-size: 1.75rem; }
+    .intro p {
+      font-size: 1.25rem;
+      color: var(--color-light);
+      max-width: 700px;
+      margin: 1rem auto 0;
+    }
+    #cta {
+      background: linear-gradient(135deg, var(--color-medium-dark), var(--color-medium-light));
+    }
+    #cta h2 {
+      color: #eee;
+      text-shadow: 0 0 8px rgba(0,0,0,0.5);
+    }
+    .btn {
+      background-image: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+      color: white;
+      padding: 1rem 2.5rem;
+      border: none;
+      border-radius: 2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      margin-top: 1.5rem;
+    }
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 10px rgba(231, 2, 52, 0.938), 0 8px 20px rgba(231, 2, 174, 0.938);
+    }
+    .grid { display: grid; gap: 4rem; padding-top: 2rem; }
+    @media(min-width: 768px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media(min-width: 1024px) { .grid { grid-template-columns: repeat(3, 1fr); } }
+    .card {
+      background: var(--color-dark);
+      padding: 2rem;
+      border-radius: 1rem;
+      color: #fff;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      border: 2px solid transparent;
+    }
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 12px currentColor;
+    }
+    .spotify { border-color: var(--spotify); color: var(--spotify); }
+    .disney { border-color: var(--disney); color: var(--disney); }
+    .prime { border-color: var(--prime); color: var(--prime); }
+    .paramount { border-color: var(--paramount); color: var(--paramount); }
+    .crunchyroll { border-color: var(--crunchyroll); color: var(--crunchyroll); }
+    .youtube { border-color: var(--youtube); color: var(--youtube); }
+    .hbo { border-color: var(--hbo); color: var(--hbo); }
+    .card h3 { text-shadow: 0 0 6px currentColor; }
+    .card p { color: #ccc; margin-top: 0.5rem; }
+    .catalog { display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center; padding-top: 2rem; }
+    .kit {
+      width: 120px;
+      height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 0.75rem;
+      text-decoration: none;
+      color: #fff;
+      font-weight: 600;
+      transition: transform 0.3s, box-shadow 0.3s;
+      border: 2px solid transparent;
+      background: var(--color-dark);
+    }
+.kit:hover { transform: translateY(-6px); box-shadow: 0 0 10px currentColor; }
+.kit.spotify { border-color: var(--spotify); color: var(--spotify); }
+.kit.disney { border-color: var(--disney); color: var(--disney); }
+.kit.prime { border-color: var(--prime); color: var(--prime); }
+.kit.paramount { border-color: var(--paramount); color: var(--paramount); }
+.kit.crunchyroll { border-color: var(--crunchyroll); color: var(--crunchyroll); }
+.kit.youtube { border-color: var(--youtube); color: var(--youtube); }
+.kit.hbo { border-color: var(--hbo); color: var(--hbo); }
+.kit.more { border-color: var(--accent); color: var(--accent); }
+#payments { margin-bottom: 6rem; }
+@keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
+footer { background: var(--color-medium-dark); padding: 4rem 0; }
+footer p { font-size: 0.9rem; color: #bbb; }
+  </style>
+</head>
+<body>
+  <header class="navbar">
+    <div class="logo">
+      <img src="Fotos/logo.png" alt="NovaStream Logo">
+      <span>NovaStream</span>
+    </div>
+    <nav class="main-nav">
+      <a href="#intro">Inicio</a>
+      <a href="#services">Servicios</a>
+      <a href="#why">Por qué</a>
+      <a href="#about">Sobre</a>
+      <a href="#contact">Contacto</a>
+      <a href="#payments">Pago</a>
+    </nav>
+    <button class="menu-toggle" aria-label="Abrir menú">☰</button>
+  </header>
+  <div class="nav-overlay">
+    <a href="#intro"     onclick="toggleMenu()">Inicio</a>
+    <a href="#services"  onclick="toggleMenu()">Servicios</a>
+    <a href="#why"       onclick="toggleMenu()">Por qué</a>
+    <a href="#about"     onclick="toggleMenu()">Sobre</a>
+    <a href="#contact"   onclick="toggleMenu()">Contacto</a>
+    <a href="#payments"  onclick="toggleMenu()">Pago</a>
+  </div>
+  <section id="intro" class="container intro">
+    <h1>Bienvenido a NovaStream</h1>
+    <p>Tu acceso premium a entretenimiento ilimitado</p>
+  </section>
+  <section id="cta" class="container">
+    <h2>Descubre todas tus suscripciones en un solo lugar</h2>
+    <button class="btn"><b>Empieza ya</b></button>
+  </section>
+  <section id="services" class="container grid">
+    <div class="card spotify" onclick="goToDetail('--spotify','Spotify Premium','Disfruta de tu música favorita sin interrupciones publicitarias. Con Spotify Premium, obtén acceso ilimitado a millones de canciones y podcasts, descarga tus listas para escucharlas sin conexión y disfruta de la mejor calidad de sonido en cualquier dispositivo.','Precio: ₡2,000','Fotos/Spotify.jpeg')">
+      <h3>Spotify Premium</h3>
+      <p>Escucha música sin anuncios ni límites.</p>
+    </div>
+    <div class="card disney" onclick="goToDetail('--disney','Disney+ Premium','Sumérgete en el mundo mágico de Disney+ con películas, series y contenido exclusivo de Disney, Pixar, Marvel, Star Wars y National Geographic. Disfruta de clásicos atemporales, nuevos estrenos y series originales para toda la familia.','Precio: ₡3,490','Fotos/Disney.jpeg')">
+      <h3>Disney+ Premium</h3>
+      <p>Series y películas exclusivas.</p>
+    </div>
+    <div class="card prime" onclick="goToDetail('--prime','Amazon Prime Video','Explora un extenso catálogo de series, películas, documentales y contenido exclusivo con Amazon Prime Video. Disfruta de producciones galardonadas, estrenos recientes y series originales en calidad HD y Ultra HD, sin anuncios y desde cualquier dispositivo.','Precio: ₡3,240','Fotos/PrimeVideo.jpeg')">
+      <h3>Amazon Prime Video</h3>
+      <p>Disfruta de películas y series originales.</p>
+    </div>
+    <div class="card paramount" onclick="goToDetail('--paramount','Paramount+','Accede a un universo de entretenimiento con Paramount+, donde encontrarás series populares, películas de éxito, contenido original y deportes en vivo. Desde clásicos de Nickelodeon hasta los últimos lanzamientos de Paramount Pictures.','Precio: ₡2,490','Fotos/Paramount.jpeg')">
+      <h3>Paramount+</h3>
+      <p>Estrenos y clásicos de Paramount.</p>
+    </div>
+    <div class="card crunchyroll" onclick="goToDetail('--crunchyroll','Crunchyroll','Tu destino definitivo para el anime y el manga. Crunchyroll ofrece acceso ilimitado a miles de episodios de tus series favoritas, simulcasts de estrenos japoneses y una gran comunidad de fanáticos del anime en todo el mundo.','Precio: ₡3,000','Fotos/Crunchyroll.jpeg')">
+      <h3>Crunchyroll</h3>
+      <p>Anime actualizado al instante.</p>
+    </div>
+    <div class="card youtube" onclick="goToDetail('--youtube','YouTube Premium','Reproducción sin anuncios, reproducción en segundo plano y descargas. Incluye YouTube Music y acceso a YouTube Originals.','Precio: ₡3,000','Fotos/YouTube.jpeg')">
+      <h3>YouTube Premium</h3>
+      <p>Reproducción sin anuncios.</p>
+    </div>
+    <div class="card hbo" onclick="goToDetail('--hbo','HBO MAX','Disfruta de estrenos, clásicos y originales exclusivos. HBO Max permite descargas, perfiles personalizados y visualización sin conexión, con acceso a contenido de HBO, DC y más.','Precio: ₡3,690','Fotos/HBOMAX.jpeg')">
+      <h3>HBO MAX</h3>
+      <p>Peliculas, series, todo en HBO MAX</p>
+    </div>
+  </section>
+  <section id="why" class="container">
+    <h2>Por qué elegirnos</h2>
+    <ul>
+      <li>Precios justos y transparentes</li>
+      <li>Soporte personalizado 24/7</li>
+      <li>Sin contratos ni cargos ocultos</li>
+      <li>Compatible con todos tus dispositivos</li>
+    </ul>
+  </section>
+  <section id="about" class="container">
+    <h2>Sobre NovaStream</h2>
+    <p>NovaStream nace como una iniciativa joven y confiable para ofrecerte acceso rápido,<br>
+    seguro y económico a servicios de suscripción Premium.<br>
+    Con el respaldo de clientes satisfechos y atención personalizada,<br>
+    buscamos que vivas la mejor experiencia digital sin complicaciones.</p>
+  </section>
+  <section id="catalog" class="container">
+    <h2>Nuestros servicios van de:</h2>
+    <div class="catalog">
+      <div class="kit spotify" onclick="goToDetail('--spotify','Spotify Premium','Disfruta de tu música favorita sin interrupciones publicitarias. Con Spotify Premium, obtén acceso ilimitado a millones de canciones y podcasts, descarga tus listas para escucharlas sin conexión y disfruta de la mejor calidad de sonido en cualquier dispositivo.','Precio: ₡2,000','Fotos/Spotify.jpeg')">Spotify</div>
+      <div class="kit disney" onclick="goToDetail('--disney','Disney+ Premium','Sumérgete en el mundo mágico de Disney+ con películas, series y contenido exclusivo de Disney, Pixar, Marvel, Star Wars y National Geographic. Disfruta de clásicos atemporales, nuevos estrenos y series originales para toda la familia.','Precio: ₡3,490','Fotos/Disney.jpeg')">Disney+ Premium</div>
+      <div class="kit prime" onclick="goToDetail('--prime','Amazon Prime Video','Explora un extenso catálogo de series, películas, documentales y contenido exclusivo con Amazon Prime Video. Disfruta de producciones galardonadas, estrenos recientes y series originales en calidad HD y Ultra HD, sin anuncios y desde cualquier dispositivo.','Precio: ₡3,240','Fotos/PrimeVideo.jpeg')">Prime Video</div>
+      <div class="kit paramount" onclick="goToDetail('--paramount','Paramount+','Accede a un universo de entretenimiento con Paramount+, donde encontrarás series populares, películas de éxito, contenido original y deportes en vivo. Desde clásicos de Nickelodeon hasta los últimos lanzamientos de Paramount Pictures.','Precio: ₡2,490','Fotos/Paramount.jpeg')">Paramount+</div>
+      <div class="kit crunchyroll" onclick="goToDetail('--crunchyroll','Crunchyroll','Tu destino definitivo para el anime y el manga. Crunchyroll ofrece acceso ilimitado a miles de episodios de tus series favoritas, simulcasts de estrenos japoneses y una gran comunidad de fanáticos del anime en todo el mundo.','Precio: ₡3,000','Fotos/Crunchyroll.jpeg')">Crunchyroll</div>
+      <div class="kit youtube" onclick="goToDetail('--youtube','YouTube Premium','Reproducción sin anuncios, reproducción en segundo plano y descargas. Incluye YouTube Music y acceso a YouTube Originals.','Precio: ₡3,000','Fotos/YouTube.jpeg')">YouTube</div>
+      <div class="kit hbo" onclick="goToDetail('--hbo','HBO MAX','Disfruta de estrenos, clásicos y originales exclusivos. HBO Max permite descargas, perfiles personalizados y visualización sin conexión, con acceso a contenido de HBO, DC y más.','Precio: ₡3,690','Fotos/HBOMAX.jpeg')">HBO MAX</div>
+      <a href="MasInformacion.html" class="kit more">Más informacion</a>
+    </div>
+  </section>
+  <section id="advantages" class="container">
+    <h2>Ventajas</h2>
+    <ul>
+      <li>Actualizaciones constantes de catálogo</li>
+      <li>Entrega inmediata tras el pago</li>
+      <li>Gestión simplificada de tus suscripciones</li>
+      <li>Garantía de satisfacción</li>
+    </ul>
+  </section>
+  <section id="contact" class="container">
+    <h2>Contacto</h2>
+    <p>Escríbenos a
+      <a href="mailto:novastreamcr@gmail.com" style="color:var(--accent); text-shadow:0 0 8px var(--accent);">novastreamcr@gmail.com</a>
+      o WhatsApp
+      <a href="https://wa.me/50672313387" style="color:var(--accent); text-shadow:0 0 8px var(--accent);">+506 7231 3387</a>
+    </p>
+  </section>
+  <section id="payments" class="container">
+    <h2>Formas de pago</h2>
+    <ul>
+      <li>Pago Móvil (72313387)</li>
+      <li>Transferencia bancaria</li>
+      <li>PayPal: emmanuelvalverdem@gmail.com</li>
+    </ul>
+  </section>
+  <footer>
+    <p>© 2025 NovaStream – Tu mundo premium a un solo clic.</p>
+  </footer>
+  <script>
+    const btn = document.querySelector('.menu-toggle');
+    const overlay = document.querySelector('.nav-overlay');
+    function toggleMenu() {
+      overlay.style.display = overlay.style.display === 'flex' ? 'none' : 'flex';
+    }
+    btn.addEventListener('click', toggleMenu);
+   function goToDetail(colorVar, title, desc, price, imgSrc) {
+      const color = getComputedStyle(document.documentElement)
+                  .getPropertyValue(colorVar).trim();
+      const params = new URLSearchParams({
+        color,
+        title,
+        desc,
+        price,
+        img: imgSrc
+      });
+      window.location.href = 'presentacion.html?' + params.toString();
+   }
+  </script>
+</body>
+</html>

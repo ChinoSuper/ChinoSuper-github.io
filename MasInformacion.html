@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Detalle de Plataformas - NovaStream</title>
+  <link rel="icon" href="Fotos/logo.ico">
+  <link rel="stylesheet" href="MasInformacion.CSS">
+  <style>
+    :root {
+      --dark: #001830;
+      --nav-bg: #002a4e;
+      --accent: #00b2ff;
+      --spotify: #1DB954;
+      --disney: #113CCF;
+      --prime: #00A8E1;
+      --paramount: #005EB8;
+      --crunchyroll: #F47521;
+      --youtube: #FF0000;
+      --hbo: #c300ff;
+      --font: 'Segoe UI', Tahoma, sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--dark);
+      color: #eee;
+      font-family: var(--font);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    header {
+      width: 100%;
+      background: var(--nav-bg);
+      padding: 1rem;
+      position: fixed;
+      top: 0;
+      display: flex;
+      justify-content: center;
+      z-index: 1000;
+      animation: fadeInDown 0.8s ease-out;
+    }
+    header a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      position: relative;
+      transition: color .3s;
+    }
+    header a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform .3s;
+    }
+    header a:hover {
+      color: #00e0ff;
+    }
+    header a:hover::after {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+    main {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+      padding: 5rem 1rem 2rem;
+      width: 100%;
+      margin-top: 0;
+    }
+    .platform {
+      background: var(--nav-bg);
+      border: 3px solid transparent;
+      border-radius: 1rem;
+      width: 300px;
+      height: 480px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 0 10px currentColor;
+      transition: transform .3s, box-shadow .3s;
+      animation: fadeInUp .6s forwards;
+      z-index: 0;
+    }
+    .platform img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+    }
+    .platform-content {
+      padding: 1rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .platform h3 {
+      margin: .5rem 0;
+      font-size: 1.5rem;
+    }
+    .platform p {
+      font-size: .9rem;
+      overflow-y: auto;
+      margin: .5rem 0;
+    }
+    .platform button {
+      padding: .5rem 1rem;
+      border: none;
+      border-radius: .5rem;
+      color: #fff;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background .3s;
+    }
+    .platform:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 0 20px currentColor;
+    }
+    .spotify { border-color: var(--spotify); color: var(--spotify); }
+    .spotify button { background: var(--spotify); }
+    .spotify button:hover { background: #1ed760; }
+    .disney { border-color: var(--disney); color: var(--disney); }
+    .disney button { background: var(--disney); }
+    .disney button:hover { background: #2a5de0; }
+    .prime { border-color: var(--prime); color: var(--prime); }
+    .prime button { background: var(--prime); }
+    .prime button:hover { background: #1ab8f2; }
+    .paramount { border-color: var(--paramount); color: var(--paramount); }
+    .paramount button { background: var(--paramount); }
+    .paramount button:hover { background: #1a6ecf; }
+    .crunchyroll { border-color: var(--crunchyroll); color: var(--crunchyroll); }
+    .crunchyroll button { background: var(--crunchyroll); }
+    .crunchyroll button:hover { background: #f68c3a; }
+    .youtube { border-color: var(--youtube); color: var(--youtube); }
+    .youtube button { background: var(--youtube); }
+    .youtube button:hover { background: #ff3333; }
+    .hbo { border-color: var(--hbo); color: var(--hbo); }
+    .hbo button { background: var(--hbo); }
+    .hbo button:hover { background: #d13cff; }
+    footer {
+      background: var(--nav-bg);
+      width: 100%;
+      padding: 3rem 0;
+      margin-top: 2rem;
+      text-align: center;
+      color: #bbb;
+    }
+    @keyframes fadeInDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <header>
+     <a href="javascript:history.back()">&larr; Volver</a>
+  </header>
+  <main>
+    <div class="platform spotify">
+      <img src="Fotos/Spotify.jpeg" alt="Spotify Premium" />
+      <div class="platform-content">
+        <h3>Spotify Premium</h3>
+        <p>Spotify Premium ofrece escucha ilimitada sin anuncios, con descargas offline, playlists personalizadas y calidad de audio superior. Comparte y explora lo que escuchan tus amigos en tiempo real.</p>
+        <button onclick="goToDetail('--spotify','Spotify Premium','Disfruta de tu música favorita sin interrupciones publicitarias. Con Spotify Premium, obtén acceso ilimitado a millones de canciones y podcasts, descarga tus listas para escucharlas sin conexión y disfruta de la mejor calidad de sonido en cualquier dispositivo.','Precio: ₡2,000','Fotos/Spotify.jpeg')">Ver más</button>
+      </div>
+    </div>
+    <div class="platform disney">
+      <img src="Fotos/Disney.jpeg" alt="Disney+" />
+      <div class="platform-content">
+        <h3>Disney+ Premium</h3>
+        <p>Disney+ Premium incluye contenido de Disney, Pixar, Marvel, Star Wars y National Geographic. Accede a estrenos exclusivos, clásicos atemporales y funciones interactivas con control parental.</p>
+        <button onclick="goToDetail('--disney','Disney+','Sumérgete en el mundo mágico de Disney+ con películas, series y contenido exclusivo de Disney, Pixar, Marvel, Star Wars y National Geographic. Disfruta de clásicos atemporales, nuevos estrenos y series originales para toda la familia.','Precio: ₡3,490','Fotos/Disney.jpeg')">Ver más</button>
+      </div>
+    </div>
+    <div class="platform prime">
+      <img src="Fotos/PrimeVideo.jpeg" alt="Amazon Prime Video" />
+      <div class="platform-content">
+        <h3>Amazon Prime Video</h3>
+        <p>Prime Video ofrece películas, series y Amazon Originals. Disfruta canales premium a la carta, estrenos en cines para comprar o rentar, y descargas para offline.</p>
+        <button onclick="goToDetail('--prime','Amazon Prime Video','Explora un extenso catálogo de series, películas, documentales y contenido exclusivo con Amazon Prime Video. Disfruta de producciones galardonadas, estrenos recientes y series originales en calidad HD y Ultra HD, sin anuncios y desde cualquier dispositivo.','Precio: ₡3,240','Fotos/PrimeVideo.jpeg')">Ver más</button>
+      </div>
+    </div>
+    <div class="platform paramount">
+      <img src="Fotos/Paramount.jpeg" alt="Paramount+" />
+      <div class="platform-content">
+        <h3>Paramount+</h3>
+        <p>Paramount+ combina noticias, deportes en vivo, series clásicas y originales de ViacomCBS. Accede a contenido exclusivo y estrenos directamente en la plataforma.</p>
+        <button onclick="goToDetail('--paramount','Paramount+','Accede a un universo de entretenimiento con Paramount+, donde encontrarás series populares, películas de éxito, contenido original y deportes en vivo. Desde clásicos de Nickelodeon hasta los últimos lanzamientos de Paramount Pictures.','Precio: ₡2,490','Fotos/Paramount.jpeg')">Ver más</button>
+      </div>
+    </div>
+    <div class="platform crunchyroll">
+      <img src="Fotos/Crunchyroll.jpeg" alt="Crunchyroll" />
+      <div class="platform-content">
+        <h3>Crunchyroll</h3>
+        <p>Crunchyroll es líder en anime, con simulcasts del mismo día en Japón. Biblioteca amplia de episodios y películas, subtítulos y doblajes, y comunidad activa.</p>
+        <button onclick="goToDetail('--crunchyroll','Crunchyroll','Tu destino definitivo para el anime y el manga. Crunchyroll ofrece acceso ilimitado a miles de episodios de tus series favoritas, simulcasts de estrenos japoneses y una gran comunidad de fanáticos del anime en todo el mundo.','Precio: ₡3,000','Fotos/Crunchyroll.jpeg')">Ver más</button>
+      </div>
+    </div>
+    <div class="platform youtube">
+      <img src="Fotos/YouTube.jpeg" alt="YouTube Premium" />
+      <div class="platform-content">
+        <h3>YouTube Premium</h3>
+        <p>YouTube Premium permite ver videos sin anuncios, reproducir en segundo plano y descargar contenido. Incluye YouTube Music Premium con recomendaciones inteligentes.</p>
+        <button onclick="goToDetail('--youtube','YouTube Premium','Reproducción sin anuncios, reproducción en segundo plano y descargas. Incluye YouTube Music y acceso a YouTube Originals.','Precio: ₡3,000','Fotos/YouTube.jpeg')">Ver más</button>
+      </div>
+    </div>
+    <div class="platform hbo">
+      <img src="Fotos/HBOMAX.jpeg" alt="HBO MAX" />
+      <div class="platform-content">
+        <h3>HBO MAX</h3>
+        <p>HBO Max ofrece acceso a series, películas y documentales de HBO, Warner Bros. y más. Permite ver contenido sin anuncios en algunos planes y descargar para ver sin conexión.</p>
+        <button onclick="goToDetail('--hbo','HBO MAX','Disfruta de estrenos, clásicos y originales exclusivos. HBO Max permite descargas, perfiles personalizados y visualización sin conexión, con acceso a contenido de HBO, DC y más.','Precio: ₡3,690','Fotos/HBOMAX.jpeg')">Ver más</button>
+      </div>
+    </div>
+  </main>
+  <footer>
+    <p>© 2025 NovaStream - Tu mundo premium a un solo clic.</p>
+  </footer>
+  <script>
+    function goToDetail(colorVar, title, desc, price, imgSrc) {
+      const color = getComputedStyle(document.documentElement)
+                  .getPropertyValue(colorVar).trim();
+      const params = new URLSearchParams({
+        color,
+        title,
+        desc,
+        price,        
+        img: imgSrc
+      });
+      window.location.href = 'presentacion.html?' + params.toString();
+   }
+  </script>
+</body>
+</html>
